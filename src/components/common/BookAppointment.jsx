@@ -11,7 +11,7 @@ const BookAppointment = ({
   const navigate = useNavigate();
   const handleClick = () => {
     if (typeof onBookClick === "function") return onBookClick();
-    navigate("/book-rcic");
+    navigate("#");
   };
 
   return (

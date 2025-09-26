@@ -68,7 +68,7 @@ export default function Hero({
 
   function handleCTA() {
     if (typeof onCTAClick === "function") onCTAClick();
-    else navigate("/germany-consultation");
+    else navigate("#");
   }
 
   // services rotating (clickable)

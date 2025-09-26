@@ -34,7 +34,7 @@ export default function Challenges({
   // CTA fallback
   const handleCTA = () => {
     if (typeof onCTAClick === "function") return onCTAClick();
-    navigate("/germany-consultation");
+    navigate("#");
   };
 
   // toggle single panel

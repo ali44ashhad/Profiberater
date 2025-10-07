@@ -1,37 +1,37 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X, Phone, Mail } from "lucide-react";
+import logo from "../../assets/logo.png";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
 
+  // Detect scroll for sticky header effect
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 10);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Navigation Links
   const navigation = [
     { name: "Home", href: "/" },
     { name: "About Us", href: "/about" },
     { name: "Services", href: "/services" },
-    { name: "Coaching", href: "#" },
-    { name: "Team", href: "#" },
-
-    { name: "Contact Us", href: "#" },
+    { name: "Coaching", href: "/coaching" },
+    { name: "Team", href: "/team" },
+    { name: "Contact Us", href: "/contact" },
   ];
-  // const navigation = [
-  //   { name: "Home", href: "/" },
-  //   { name: "About Us", href: "#" },
-  //   { name: "Services", href: "#" },
-  //   { name: "Coaching", href: "#" },
-  //   { name: "Team", href: "#" },
-  //   { name: "More Services", href: "#" },
-  //   { name: "Contact Us", href: "#" },
-  // ];
 
   const isActive = (path) => location.pathname === path;
 
   return (
     <>
-      {/* Top Bar */}
-      <div className="w-full bg-[#0f766e] text-white py-2">
-        <div className="px-4">
+      {/* ---------- Top Bar ---------- */}
+      <div className="w-full bg-[#0f766e] text-white py-1">
+        <div className=" mx-auto px-4">
           <div className="flex justify-between items-center text-sm">
             <div className="flex items-center space-x-4">
               <div className="flex items-center">
@@ -44,56 +44,36 @@ const Header = () => {
               </div>
             </div>
             <div className="hidden md:block">
-              <span>Mon-Fri: 9:00 AM - 6:00 PM</span>
+              <span>Mon–Fri: 9:00 AM – 6:00 PM</span>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Main Header */}
-      <header className="w-full bg-white shadow-sm sticky top-0 z-50">
-        <nav className="px-4" aria-label="Primary">
+      {/* ---------- Main Header ---------- */}
+      <header
+        className={`w-full sticky top-0 z-50 transition-all duration-300 ${
+          scrolled ? "bg-white shadow-md" : "bg-white"
+        }`}
+      >
+        <nav className="mx-auto px-4" role="navigation" aria-label="Primary">
           <div className="flex justify-between items-center h-20">
-            {/* Logo */}
+            {/* ---------- Logo ---------- */}
             <Link
               to="/"
               className="flex items-center space-x-3 no-underline"
-              aria-label="Profiberater — home"
+              aria-label="Home"
             >
-              <div
-                className="w-12 h-12 rounded-lg flex items-center justify-center"
-                style={{
-                  background:
-                    "linear-gradient(135deg, #0ea5a4 0%, #0f766e 100%)",
-                  boxShadow: "0 6px 18px rgba(15,23,42,0.08)",
-                }}
-              >
-                <span className="text-white font-bold text-xl">C</span>
-              </div>
-
-              <div className="leading-tight">
-                <span
-                  className="block text-2xl font-extrabold text-[#0f172a] tracking-tight"
-                  style={{ fontFamily: "Poppins, Inter, system-ui" }}
-                >
-                  Profiberater
-                </span>
-                <p
-                  className="text-sm text-[#64748b] m-0"
-                  style={{ fontFamily: "Inter, system-ui" }}
-                >
-                  Consulting & Coaching
-                </p>
-              </div>
+              <img src={logo} alt="logo" className="h-16 w-auto" />
             </Link>
 
-            {/* Desktop Navigation */}
+            {/* ---------- Desktop Navigation ---------- */}
             <div className="hidden lg:flex items-center space-x-8">
               {navigation.map((item) => (
                 <Link
                   key={item.name}
                   to={item.href}
-                  className={`relative py-2 font-medium text-base no-underline ${
+                  className={`relative py-1 font-medium text-base no-underline transition-colors duration-200 ${
                     isActive(item.href)
                       ? "text-[#0f766e]"
                       : "text-[#374151] hover:text-[#0f766e]"
@@ -101,20 +81,17 @@ const Header = () => {
                 >
                   {item.name}
                   {isActive(item.href) && (
-                    <span
-                      className="absolute left-0 -bottom-1 w-full h-0.5"
-                      style={{ backgroundColor: "#0f766e" }}
-                    />
+                    <span className="absolute left-0 -bottom-1 w-full h-0.5 bg-[#0f766e]" />
                   )}
                 </Link>
               ))}
             </div>
 
-            {/* CTA Button (desktop) */}
+            {/* ---------- CTA Button (Desktop) ---------- */}
             <div className="hidden lg:block">
               <Link
                 to="/contact"
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-white shadow"
+                className="inline-flex items-center gap-2 px-5 py-1.5 rounded-lg font-semibold text-white shadow-md transition-transform hover:scale-105"
                 style={{
                   background:
                     "linear-gradient(180deg, #0f766e 0%, #0ea5a4 100%)",
@@ -124,10 +101,10 @@ const Header = () => {
               </Link>
             </div>
 
-            {/* Mobile menu button */}
+            {/* ---------- Mobile Menu Button ---------- */}
             <button
               className="lg:hidden p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0ea5a4]"
-              onClick={() => setIsMenuOpen((s) => !s)}
+              onClick={() => setIsMenuOpen((prev) => !prev)}
               aria-expanded={isMenuOpen}
               aria-label={isMenuOpen ? "Close menu" : "Open menu"}
             >
@@ -135,9 +112,9 @@ const Header = () => {
             </button>
           </div>
 
-          {/* Mobile Navigation */}
+          {/* ---------- Mobile Navigation ---------- */}
           <div
-            className={`lg:hidden transition-max-h duration-300 overflow-hidden ${
+            className={`lg:hidden transition-all duration-500 ease-in-out overflow-hidden ${
               isMenuOpen ? "max-h-[600px]" : "max-h-0"
             }`}
             aria-hidden={!isMenuOpen}
@@ -148,7 +125,7 @@ const Header = () => {
                   key={item.name}
                   to={item.href}
                   onClick={() => setIsMenuOpen(false)}
-                  className={`block px-3 py-3 rounded-lg text-base font-medium no-underline ${
+                  className={`block px-3 py-1 rounded-lg text-base font-medium no-underline transition-colors duration-200 ${
                     isActive(item.href)
                       ? "text-[#0f766e] bg-[#ecfdf7]"
                       : "text-[#374151] hover:text-[#0f766e] hover:bg-gray-50"
@@ -162,7 +139,7 @@ const Header = () => {
                 <Link
                   to="/contact"
                   onClick={() => setIsMenuOpen(false)}
-                  className="block w-full text-center px-4 py-2 rounded-lg font-semibold text-white shadow"
+                  className="block w-full text-center px-4 py-1 rounded-lg font-semibold text-white shadow-md transition-transform hover:scale-105"
                   style={{
                     background:
                       "linear-gradient(180deg, #0f766e 0%, #0ea5a4 100%)",
